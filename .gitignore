@@ -1,3 +1,7 @@
 .class
 **/target/**
+<<<<<<< HEAD
 /configserver/target/
+=======
+**idea**
+>>>>>>> upstream/main
