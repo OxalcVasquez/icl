@@ -12,7 +12,7 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
  *
  * @author Usuario
  */
-@EnableEurekaClient
+//@EnableEurekaClient
 @SpringBootApplication
 public class Application {
     public static void main(String[] args) {

@@ -11,3 +11,9 @@
 /api-user/target/
 /api-car/target/
 >>>>>>> upstream/main
+/eureka/target/
+/dao/target/
+/service/target/
+/zuulone/target/
+/zuultwo/target/
+/api-bike/target/

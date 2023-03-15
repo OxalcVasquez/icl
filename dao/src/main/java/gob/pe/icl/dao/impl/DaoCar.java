@@ -5,22 +5,24 @@
 package gob.pe.icl.dao.impl;
 
 import com.jofrantoba.model.jpa.daoentity.AbstractJpaDao;
-import gob.pe.icl.dao.inter.InterDaoUser;
-import gob.pe.icl.entity.User;
+import gob.pe.icl.dao.inter.InterDaoCar;
+import gob.pe.icl.entity.Car;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 /**
  *
- * @author Usuario
+ * @author usuario
  */
 @Repository
-public class DaoUser extends AbstractJpaDao<User> implements InterDaoUser {
-    
-    public DaoUser(@Qualifier("sessionFactory")SessionFactory sessionFactory) {
+
+public class DaoCar extends AbstractJpaDao<Car> implements InterDaoCar {
+
+    public DaoCar(@Qualifier("sessionFactory") SessionFactory sessionFactory) {
         super();
-        setClazz(User.class);
+        setClazz(Car.class);
         this.setSessionFactory(sessionFactory);
     }
+
 }

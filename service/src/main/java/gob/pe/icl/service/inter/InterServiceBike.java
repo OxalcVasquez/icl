@@ -5,13 +5,17 @@
 package gob.pe.icl.service.inter;
 
 import com.jofrantoba.model.jpa.shared.UnknownException;
+import gob.pe.icl.entity.Bike;
+import gob.pe.icl.entity.Car;
 import gob.pe.icl.entity.User;
+import java.util.List;
 
 /**
  *
  * @author Usuario
  */
-public interface InterServiceUser {
-    User saveUser(User entidad)throws UnknownException;
-    User getUserById(long id);
+public interface InterServiceBike {
+    Bike saveBike(Bike entidad)throws UnknownException;
+    Bike getBikeById(long id);
+    List<Bike> getBikeByUserId(int userId);
 }
