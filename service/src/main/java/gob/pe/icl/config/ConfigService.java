@@ -4,6 +4,9 @@
  */
 package gob.pe.icl.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,6 +16,11 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @ComponentScan(basePackages = { "gob.pe.icl.service"})
-public class ConfigService {    
-    
+@EnableFeignClients(basePackages = "gob.pe.icl.service")
+public class ConfigService { 
+//   
+//    @Bean
+//    public RestTemplate restTemplate() {
+//        return new RestTemplate();
+//    }
 }

@@ -40,7 +40,7 @@ public class CarController {
         
     }
     
-     @PostMapping(value="/{id}")
+     @GetMapping(value="/{id}")
     public ResponseEntity<Car> getById(@PathVariable("id") int id) throws UnknownException{        
         Car car = carService.getCarById(id);
         if(car == null)

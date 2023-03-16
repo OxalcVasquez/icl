@@ -32,40 +32,42 @@ public class ServiceCarImpl implements InterServiceCar {
 
     @Override
     public Car saveCar(Car entidad) throws UnknownException {
-        Transaction tx = dao.getSession().beginTransaction();        
+        Transaction tx = dao.getSession().beginTransaction();
         entidad.setIsPersistente(Boolean.TRUE);
         entidad.setVersion((new Date()).getTime());
         dao.save(entidad);
         tx.commit();
-        return entidad;   
+        return entidad;
     }
 
     @Override
     public Car getCarById(long id) {
-         try {
-            return dao.findById(id);
+        Car car = null;
+        try {
+            Transaction tx = dao.getSession().beginTransaction();
+            car = dao.findById(id);
+            tx.commit();
         } catch (UnknownException ex) {
             Logger.getLogger(ServiceUserImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return null;
+        return car;
     }
 
     @Override
     public List<Car> getCarByUserId(int userId) {
-         try {            
-             List<Car> list = new ArrayList<>();
-             for (Car car : dao.allFields()) {
-                 if (car.getUserId() == userId) {
-                 list.add(car);
-                 }
-             }
-                  
-            return list;
-            
+        List<Car> list = new ArrayList<>();
+        try {
+            Transaction tx = dao.getSession().beginTransaction();
+            for (Car car : dao.allFields()) {
+                if (car.getUserId() == userId) {
+                    list.add(car);
+                }
+            }
+            tx.commit();
         } catch (UnknownException ex) {
             Logger.getLogger(ServiceUserImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return null;
+        return list;
     }
 
 }

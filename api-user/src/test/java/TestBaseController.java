@@ -20,7 +20,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
  */
 
 @Log4j2
-public class TestBaseService {
+public class TestBaseController {
     
     protected AnnotationConfigApplicationContext contextEntity = new AnnotationConfigApplicationContext(ConfigEntity.class);
     protected AnnotationConfigApplicationContext contextDao = new AnnotationConfigApplicationContext(ConfigDao.class);

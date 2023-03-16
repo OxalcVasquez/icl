@@ -45,30 +45,36 @@ public class ServiceBikeImpl implements InterServiceBike {
 
     @Override
     public Bike getBikeById(long id) {
+        Bike bike = null;
         try {
-            return dao.findById(id);
+            Transaction tx = dao.getSession().beginTransaction();
+            bike = dao.findById(id);
+            tx.commit();
         } catch (UnknownException ex) {
             Logger.getLogger(ServiceUserImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return null;
+        return bike;
     }
 
     @Override
     public List<Bike> getBikeByUserId(int userId) {
+        List<Bike> list = new ArrayList<>();
+
         try {
-            List<Bike> list = new ArrayList<>();
+            Transaction tx = dao.getSession().beginTransaction();
+
             for (Bike bike : dao.allFields()) {
                 if (bike.getUserId() == userId) {
                     list.add(bike);
                 }
             }
 
-            return list;
+            tx.commit();
 
         } catch (UnknownException ex) {
             Logger.getLogger(ServiceUserImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return null;
+        return list;
     }
 
 }
