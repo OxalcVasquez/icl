@@ -25,7 +25,7 @@ import org.springframework.stereotype.Component;
 @Data
 @EqualsAndHashCode(callSuper=false)
 @Entity
-@Table(catalog="demotiktok",schema="demotiktok",name = "bike")
+@Table(catalog="icl",schema="public",name = "bike")
 public class Bike extends GlobalEntityPkNumeric implements Serializable{
     @Column(name = "brand")
     private String brand;

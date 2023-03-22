@@ -23,6 +23,7 @@
         <module>api-user</module>
         <module>api-car</module>
         <module>api-bike</module>
+        <module>../Devtest/jofrantoba-model-jpa</module>
     </modules>
     <properties>
     </properties>
