@@ -5,6 +5,7 @@ package gob.pe.icl.api.user;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 
 /**
  *
@@ -12,6 +13,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 //@EnableEurekaClient
 @SpringBootApplication
+@EnableFeignClients(basePackages = "gob.pe.icl.*")
 public class Application {
 
     public static void main(String[] args) {

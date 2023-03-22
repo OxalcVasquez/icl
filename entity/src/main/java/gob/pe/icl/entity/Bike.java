@@ -7,6 +7,9 @@ package gob.pe.icl.entity;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -30,4 +33,8 @@ public class Bike extends GlobalEntityPkNumeric implements Serializable{
     private String model;
     @Column(name = "user_id")
     private int userId;
+   
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", insertable=false, updatable=false)
+    private User user;
 }

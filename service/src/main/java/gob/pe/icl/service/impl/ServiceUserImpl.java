@@ -9,8 +9,6 @@ import gob.pe.icl.dao.inter.InterDaoUser;
 import gob.pe.icl.entity.Bike;
 import gob.pe.icl.entity.Car;
 import gob.pe.icl.entity.User;
-import gob.pe.icl.service.feign.BikeFeign;
-import gob.pe.icl.service.feign.CarFeign;
 import gob.pe.icl.service.inter.InterServiceUser;
 import java.util.Date;
 import java.util.HashMap;
@@ -32,10 +30,10 @@ public class ServiceUserImpl implements InterServiceUser {
     @Autowired
     private InterDaoUser dao;
     
-    @Autowired
-    CarFeign carFeign;
-    @Autowired
-    BikeFeign bikeFeign;
+//    @Autowired
+//    CarFeign carFeign;
+//    @Autowired
+//    BikeFeign bikeFeign;
 //    @Autowired
 //    RestTemplate restTemplate;
     
@@ -72,39 +70,39 @@ public class ServiceUserImpl implements InterServiceUser {
 //     List<Bike> bikes = restTemplate.getForObject("http:localhost:9003/api/bike/byuser/" + userId, List.class);
 //     return bikes;
 //    }
-    
-     public Car saveCar(int userId, Car car) throws UnknownException{
-        car.setUserId(userId);
-        Car carNew = carFeign.saveCar(car);
-        return  carNew;
-    }
-    public Bike saveBike(int userId, Bike bike) throws UnknownException {
-        bike.setUserId(userId);
-        Bike bikeNew = bikeFeign.saveBike(bike);
-        return  bikeNew;
-    }
-    
-      public Map<String, Object> getUserAndVehicles(int userId) throws UnknownException {
-        Map<String, Object> result = new HashMap<>();
-        Transaction tx = dao.getSession().beginTransaction(); 
-        User user = dao.findById(userId);
-        if(user == null) {
-            result.put("Mensaje", "no existe el usuario");
-            return result;
-        }
-        result.put("User", user);
-        List<Car> cars = carFeign.getCars(userId);
-        if(cars.isEmpty())
-            result.put("Cars", "ese user no tiene coches");
-        else
-            result.put("Cars", cars);
-        List<Bike> bikes = bikeFeign.getBikes(userId);
-        if(bikes.isEmpty())
-            result.put("Bikes", "ese user no tiene motos");
-        else
-            result.put("Bikes", bikes);
-        tx.commit();
-        return result;
-    }
+//    
+//     public Car saveCar(int userId, Car car) throws UnknownException{
+//        car.setUserId(userId);
+//        Car carNew = carFeign.saveCar(car);
+//        return  carNew;
+//    }
+//    public Bike saveBike(int userId, Bike bike) throws UnknownException {
+//        bike.setUserId(userId);
+//        Bike bikeNew = bikeFeign.saveBike(bike);
+//        return  bikeNew;
+//    }
+//    
+//      public Map<String, Object> getUserAndVehicles(int userId) throws UnknownException {
+//        Map<String, Object> result = new HashMap<>();
+//        Transaction tx = dao.getSession().beginTransaction(); 
+//        User user = dao.findById(userId);
+//        if(user == null) {
+//            result.put("Mensaje", "no existe el usuario");
+//            return result;
+//        }
+//        result.put("User", user);
+//        List<Car> cars = carFeign.getCars(userId);
+//        if(cars.isEmpty())
+//            result.put("Cars", "ese user no tiene coches");
+//        else
+//            result.put("Cars", cars);
+//        List<Bike> bikes = bikeFeign.getBikes(userId);
+//        if(bikes.isEmpty())
+//            result.put("Bikes", "ese user no tiene motos");
+//        else
+//            result.put("Bikes", bikes);
+//        tx.commit();
+//        return result;
+//    }
 
 }

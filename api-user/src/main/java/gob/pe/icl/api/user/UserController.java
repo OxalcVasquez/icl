@@ -7,10 +7,13 @@ package gob.pe.icl.api.user;
 
 
 import com.jofrantoba.model.jpa.shared.UnknownException;
+import gob.pe.icl.api.user.feign.BikeFeign;
+import gob.pe.icl.api.user.feign.CarFeign;
 import gob.pe.icl.entity.Bike;
 import gob.pe.icl.entity.Car;
 import gob.pe.icl.entity.User;
 import gob.pe.icl.service.impl.ServiceUserImpl;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +39,10 @@ public class UserController {
     
     @Autowired
     private ServiceUserImpl userService;
-    
+    @Autowired
+    CarFeign carFeign;
+    @Autowired
+    BikeFeign bikeFeign;
     
     
     @PostMapping(value="save", consumes = {MediaType.APPLICATION_JSON_VALUE},
@@ -77,7 +83,8 @@ public class UserController {
     public ResponseEntity<Car> saveCar(@PathVariable("userId") int userId, @RequestBody Car car) throws UnknownException {
         if(userService.getUserById(userId) == null)
             return ResponseEntity.notFound().build();
-        Car carNew = userService.saveCar(userId, car);
+        car.setUserId(userId);
+        Car carNew = carFeign.saveCar(car);
         return ResponseEntity.ok(carNew);
     }
 
@@ -85,13 +92,27 @@ public class UserController {
     public ResponseEntity<Bike> saveBike(@PathVariable("userId") int userId, @RequestBody Bike bike) throws UnknownException {
         if(userService.getUserById(userId) == null)
             return ResponseEntity.notFound().build();
-        Bike bikeNew = userService.saveBike(userId, bike);
+        bike.setUserId(userId);
+        Bike bikeNew = bikeFeign.saveBike(bike);
         return  ResponseEntity.ok(bikeNew);
     }
     
     @PostMapping("/getAll/{userId}")
     public ResponseEntity<Map<String, Object>> getAllVehicles(@PathVariable("userId") int userId) throws UnknownException {
-        Map<String, Object> result = userService.getUserAndVehicles(userId);
+        Map<String, Object> result = new HashMap<>();
+        if(userService.getUserById(userId) == null)
+            return ResponseEntity.notFound().build();
+        result.put("User", userService.getUserById(userId));
+        List<Car> cars = carFeign.getCars(userId);
+        if(cars.isEmpty())
+            result.put("Cars", "ese user no tiene coches");
+        else
+            result.put("Cars", cars);
+        List<Bike> bikes = bikeFeign.getBikes(userId);
+        if(bikes.isEmpty())
+            result.put("Bikes", "ese user no tiene motos");
+        else
+            result.put("Bikes", bikes);
         return ResponseEntity.ok(result);
     }
    

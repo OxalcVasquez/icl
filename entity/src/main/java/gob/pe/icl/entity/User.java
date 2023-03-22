@@ -5,8 +5,11 @@
 package gob.pe.icl.entity;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -28,4 +31,11 @@ public class User extends GlobalEntityPkNumeric implements Serializable{
     private String name;
     @Column(name = "email")
     private String email;
+    
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private List<Car> cars;
+     
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private List<Bike> bikes;
+    
 }

@@ -58,16 +58,14 @@ public class ServiceBikeImpl implements InterServiceBike {
 
     @Override
     public List<Bike> getBikeByUserId(int userId) {
+
         List<Bike> list = new ArrayList<>();
+        String[] mapOrder = {"model:desc"};
 
         try {
             Transaction tx = dao.getSession().beginTransaction();
 
-            for (Bike bike : dao.allFields()) {
-                if (bike.getUserId() == userId) {
-                    list.add(bike);
-                }
-            }
+            list = (List<Bike>) dao.allFields("=:userId:" + userId, mapOrder);
 
             tx.commit();
 

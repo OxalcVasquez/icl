@@ -57,12 +57,8 @@ public class ServiceCarImpl implements InterServiceCar {
     public List<Car> getCarByUserId(int userId) {
         List<Car> list = new ArrayList<>();
         try {
-            Transaction tx = dao.getSession().beginTransaction();
-            for (Car car : dao.allFields()) {
-                if (car.getUserId() == userId) {
-                    list.add(car);
-                }
-            }
+          Transaction tx = dao.getSession().beginTransaction();
+            list = (List<Car>) dao.allFields("=:userId:" + userId, null);
             tx.commit();
         } catch (UnknownException ex) {
             Logger.getLogger(ServiceUserImpl.class.getName()).log(Level.SEVERE, null, ex);
