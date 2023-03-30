@@ -13,7 +13,9 @@
         <version.maven-source-plugin>3.2.1</version.maven-source-plugin>      
         <version.hibernate-core>5.4.32.Final</version.hibernate-core> 
         <version.jakarta.validation-api>2.0.2</version.jakarta.validation-api>
-        <version.spring-context>5.3.14</version.spring-context>       
+        <version.spring-context>5.3.14</version.spring-context>     
+        <version.hibernate-types-55>2.21.1</version.hibernate-types-55>
+        <version.jackson-databind>2.13.1</version.jackson-databind>  
     </properties>
     <dependencies>                                                        
         <dependency>
@@ -37,6 +39,16 @@
             <artifactId>slf4j-api</artifactId>
             <version>1.7.32</version>
         </dependency>
+        <dependency>
+            <groupId>com.vladmihalcea</groupId>
+            <artifactId>hibernate-types-55</artifactId>
+            <version>${version.hibernate-types-55}</version>
+        </dependency>
+       <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${version.jackson-databind}</version>
+       </dependency> 
     </dependencies>
     <build>
         <plugins>

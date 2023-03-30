@@ -16,6 +16,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.transaction.Transactional;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.hibernate.Transaction;
@@ -30,11 +32,17 @@ public class ServiceCarImpl implements InterServiceCar {
     @Autowired
     private InterDaoCar dao;
 
+    @Autowired
+    private InterDaoUser userDao;
+    
     @Override
     public Car saveCar(Car entidad) throws UnknownException {
         Transaction tx = dao.getSession().beginTransaction();
         entidad.setIsPersistente(Boolean.TRUE);
-        entidad.setVersion((new Date()).getTime());
+        entidad.setVersion((new Date()).getTime());  
+        Hibernate.initialize(entidad.getUser());
+        User user = userDao.findById(entidad.getUser().getId());
+        entidad.setUser(user);
         dao.save(entidad);
         tx.commit();
         return entidad;
@@ -54,6 +62,7 @@ public class ServiceCarImpl implements InterServiceCar {
     }
 
     @Override
+    @Transactional
     public List<Car> getCarByUserId(int userId) {
         List<Car> list = new ArrayList<>();
         try {

@@ -4,6 +4,8 @@
  */
 package gob.pe.icl.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Column;
@@ -13,6 +15,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +26,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Scope("prototype")
-@Data
+@Getter
+@Setter
 @EqualsAndHashCode(callSuper=false)
 @Entity
 @Table(catalog="icl",schema="public",name = "users")
@@ -32,9 +37,11 @@ public class User extends GlobalEntityPkNumeric implements Serializable{
     @Column(name = "email")
     private String email;
     
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<Car> cars;
      
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<Bike> bikes;
     

@@ -4,8 +4,6 @@ package gob.pe.icl.api.user;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-
-
 import com.jofrantoba.model.jpa.shared.UnknownException;
 import gob.pe.icl.api.user.feign.BikeFeign;
 import gob.pe.icl.api.user.feign.CarFeign;
@@ -32,35 +30,33 @@ import org.springframework.web.client.RestTemplate;
  *
  * @author usuario
  */
-
 @RestController
 @RequestMapping("api/user")
 public class UserController {
-    
+
     @Autowired
     private ServiceUserImpl userService;
     @Autowired
     CarFeign carFeign;
     @Autowired
     BikeFeign bikeFeign;
-    
-    
-    @PostMapping(value="save", consumes = {MediaType.APPLICATION_JSON_VALUE},
+
+    @PostMapping(value = "save", consumes = {MediaType.APPLICATION_JSON_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<User> save(@RequestBody User user) throws UnknownException{        
+    public ResponseEntity<User> save(@RequestBody User user) throws UnknownException {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.saveUser(user));
-        
+
     }
-    
-    @PostMapping(value="/{id}")
-    public ResponseEntity<User> getById(@PathVariable("id") int id) throws UnknownException{        
+
+    @PostMapping(value = "/{id}")
+    public ResponseEntity<User> getById(@PathVariable("id") int id) throws UnknownException {
         User user = userService.getUserById(id);
-        if(user == null)
+        if (user == null) {
             return ResponseEntity.notFound().build();
+        }
         return ResponseEntity.ok(user);
     }
-    
-   
+
 //    @GetMapping("/cars/{userId}")
 //    public ResponseEntity<List<Car>> getCars(@PathVariable("userId") int userId) {
 //        User user = userService.getUserById(userId);
@@ -78,43 +74,82 @@ public class UserController {
 //        List<Bike> bikes = userService.getBikes(userId);
 //        return ResponseEntity.ok(bikes);
 //    } 
-    
     @PostMapping("/savecar/{userId}")
     public ResponseEntity<Car> saveCar(@PathVariable("userId") int userId, @RequestBody Car car) throws UnknownException {
-        if(userService.getUserById(userId) == null)
+        if (userService.getUserById(userId) == null) {
             return ResponseEntity.notFound().build();
-        car.setUserId(userId);
+        }
+        car.setUser(userService.getUserById(userId));
         Car carNew = carFeign.saveCar(car);
         return ResponseEntity.ok(carNew);
     }
 
     @PostMapping("/savebike/{userId}")
     public ResponseEntity<Bike> saveBike(@PathVariable("userId") int userId, @RequestBody Bike bike) throws UnknownException {
-        if(userService.getUserById(userId) == null)
+        if (userService.getUserById(userId) == null) {
             return ResponseEntity.notFound().build();
-        bike.setUserId(userId);
+        }
+        bike.setUser(userService.getUserById(userId));
         Bike bikeNew = bikeFeign.saveBike(bike);
-        return  ResponseEntity.ok(bikeNew);
+        return ResponseEntity.ok(bikeNew);
     }
-    
+
+//    @PostMapping("/getAll/{userId}")
+//    public ResponseEntity<Map<String, Object>> getAllVehicles(@PathVariable("userId") int userId) throws UnknownException {
+//        Map<String, Object> result = new HashMap<>();
+//        if(userService.getUserById(userId) == null)
+//            return ResponseEntity.notFound().build();
+//        result.put("User", userService.getUserById(userId));
+//        List<Car> cars = carFeign.getCars(userId);
+//        if(cars.isEmpty())
+//            result.put("Cars", "ese user no tiene coches");
+//        else
+//            result.put("Cars", cars);
+//        List<Bike> bikes = bikeFeign.getBikes(userId);
+//        if(bikes.isEmpty())
+//            result.put("Bikes", "ese user no tiene motos");
+//        else
+//            result.put("Bikes", bikes);
+//        return ResponseEntity.ok(result);
+//    }
     @PostMapping("/getAll/{userId}")
     public ResponseEntity<Map<String, Object>> getAllVehicles(@PathVariable("userId") int userId) throws UnknownException {
         Map<String, Object> result = new HashMap<>();
-        if(userService.getUserById(userId) == null)
+        User user = userService.getUserWithCars(userId);
+        if (user == null) {
             return ResponseEntity.notFound().build();
-        result.put("User", userService.getUserById(userId));
-        List<Car> cars = carFeign.getCars(userId);
+        }
+        result.put("User", user);
+        List<Car> cars = user.getCars();
+
         if(cars.isEmpty())
             result.put("Cars", "ese user no tiene coches");
         else
             result.put("Cars", cars);
-        List<Bike> bikes = bikeFeign.getBikes(userId);
-        if(bikes.isEmpty())
+        List<Bike> bikes = user.getBikes();
+        if (bikes.isEmpty()) {
             result.put("Bikes", "ese user no tiene motos");
-        else
+        } else {
             result.put("Bikes", bikes);
+        }
         return ResponseEntity.ok(result);
     }
-   
-    
+
+    @GetMapping("/bikes/{userId}")
+    public ResponseEntity<List<Bike>> findBikesByUserId(@PathVariable("userId") Long userId) throws UnknownException {
+        if (userService.getUserById(userId) == null) {
+            return ResponseEntity.notFound().build();
+        }
+        List<Bike> userBikes = userService.findBikesByUserId(userId);
+        return ResponseEntity.ok(userBikes);
+    }
+
+    @GetMapping("/cars/{user_id}")
+    public ResponseEntity<List<Car>> findCarsByUserId(@PathVariable("user_id") Long user_id) throws UnknownException {
+        if (userService.getUserById(user_id) == null) {
+            return ResponseEntity.notFound().build();
+        }
+        List<Car> userCars = userService.findCarsByUserId(user_id);
+        return ResponseEntity.ok(userCars);
+    }
 }

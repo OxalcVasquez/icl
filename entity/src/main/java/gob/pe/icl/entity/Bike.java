@@ -4,6 +4,9 @@
  */
 package gob.pe.icl.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,6 +16,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +27,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Scope("prototype")
-@Data
+@Getter
+@Setter
 @EqualsAndHashCode(callSuper=false)
 @Entity
 @Table(catalog="icl",schema="public",name = "bike")
@@ -31,10 +37,14 @@ public class Bike extends GlobalEntityPkNumeric implements Serializable{
     private String brand;
     @Column(name = "model")
     private String model;
-    @Column(name = "user_id")
-    private int userId;
-   
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", referencedColumnName = "id", insertable=false, updatable=false)
+    
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
+    
+    @JsonProperty("user")
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

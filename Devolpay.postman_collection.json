@@ -10,12 +10,9 @@
 			"name": "API USER",
 			"item": [
 				{
-					"name": "Get All",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
+					"name": "Get user",
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -27,14 +24,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8090/api/car/1",
+							"raw": "localhost:8090/api/user/1",
 							"host": [
 								"localhost"
 							],
 							"port": "8090",
 							"path": [
 								"api",
-								"car",
+								"user",
 								"1"
 							]
 						}
@@ -176,7 +173,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8090/api/user/getAll/1",
+							"raw": "localhost:8090/api/user/getAll/4",
 							"host": [
 								"localhost"
 							],
@@ -185,7 +182,7 @@
 								"api",
 								"user",
 								"getAll",
-								"1"
+								"4"
 							]
 						}
 					},
@@ -226,16 +223,16 @@
 			"name": "API CAR",
 			"item": [
 				{
-					"name": "Cars by user",
+					"name": "Get Car",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:62971/api/car/1",
+							"raw": "localhost:8090/api/car/1",
 							"host": [
 								"localhost"
 							],
-							"port": "62971",
+							"port": "8090",
 							"path": [
 								"api",
 								"car",
@@ -252,7 +249,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"brand\":\"instacias60296\", \"model\":\"sd\",\"userId\": 1}",
+							"raw": "{\"brand\":\"carro marzo\",\r\n\"model\":\"sd\",\r\n\"user\": {\r\n    \"id\": 1\r\n}}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -260,11 +257,11 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:60296/api/car/save",
+							"raw": "localhost:8090/api/car/save",
 							"host": [
 								"localhost"
 							],
-							"port": "60296",
+							"port": "8090",
 							"path": [
 								"api",
 								"car",
@@ -309,20 +306,69 @@
 			"name": "API BIKE",
 			"item": [
 				{
+					"name": "Save bike",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"brand\":\"bike marzo\", \"model\":\"model marzo\",\"user\": {\r\n    \"id\": 4\r\n}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8090/api/bike/save",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"bike",
+								"save"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Bike by user",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:55814/api/bike/byuser/1",
+							"raw": "localhost:8090/api/bike/byuser/1",
 							"host": [
 								"localhost"
 							],
-							"port": "55814",
+							"port": "8090",
 							"path": [
 								"api",
 								"bike",
 								"byuser",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Bike",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8090/api/bike/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"bike",
 								"1"
 							]
 						}

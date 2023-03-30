@@ -5,7 +5,10 @@
 package gob.pe.icl.service.inter;
 
 import com.jofrantoba.model.jpa.shared.UnknownException;
+import gob.pe.icl.entity.Bike;
+import gob.pe.icl.entity.Car;
 import gob.pe.icl.entity.User;
+import java.util.List;
 
 /**
  *
@@ -14,4 +17,8 @@ import gob.pe.icl.entity.User;
 public interface InterServiceUser {
     User saveUser(User entidad)throws UnknownException;
     User getUserById(long id);
+    User getUserWithCars(long id);
+     List<Car> findCarsByUserId(Long user_id) throws UnknownException;
+    List<Bike> findBikesByUserId(Long userId) throws UnknownException;
+
 }

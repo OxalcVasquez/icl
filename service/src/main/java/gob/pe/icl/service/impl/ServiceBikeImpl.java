@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.hibernate.Transaction;
@@ -32,12 +33,18 @@ public class ServiceBikeImpl implements InterServiceBike {
 
     @Autowired
     private InterDaoBike dao;
+    
+     @Autowired
+    private InterDaoUser userDao;
 
     @Override
     public Bike saveBike(Bike entidad) throws UnknownException {
         Transaction tx = dao.getSession().beginTransaction();
         entidad.setIsPersistente(Boolean.TRUE);
         entidad.setVersion((new Date()).getTime());
+        Hibernate.initialize(entidad.getUser());
+        User user = userDao.findById(entidad.getUser().getId());
+        entidad.setUser(user);
         dao.save(entidad);
         tx.commit();
         return entidad;

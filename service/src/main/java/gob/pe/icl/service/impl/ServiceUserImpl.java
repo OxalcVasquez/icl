@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.transaction.Transactional;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.hibernate.Transaction;
@@ -29,30 +31,28 @@ public class ServiceUserImpl implements InterServiceUser {
 
     @Autowired
     private InterDaoUser dao;
-    
+
 //    @Autowired
 //    CarFeign carFeign;
 //    @Autowired
 //    BikeFeign bikeFeign;
 //    @Autowired
 //    RestTemplate restTemplate;
-    
-
     @Override
     public User saveUser(User entidad) throws UnknownException {
-        Transaction tx = dao.getSession().beginTransaction();        
+        Transaction tx = dao.getSession().beginTransaction();
         entidad.setIsPersistente(Boolean.TRUE);
         entidad.setVersion((new Date()).getTime());
         dao.save(entidad);
         tx.commit();
-        return entidad;        
+        return entidad;
     }
 
     @Override
     public User getUserById(long id) {
         User user = null;
         try {
-            Transaction tx = dao.getSession().beginTransaction(); 
+            Transaction tx = dao.getSession().beginTransaction();
             user = dao.findById(id);
             tx.commit();
         } catch (UnknownException ex) {
@@ -60,7 +60,31 @@ public class ServiceUserImpl implements InterServiceUser {
         }
         return user;
     }
-    
+
+    @Override
+    @Transactional
+    public User getUserWithCars(long id) {
+        User user = null;
+        try {
+            Transaction tx = dao.getSession().beginTransaction();
+            user = dao.findById(id);
+            if (user != null) {
+                Hibernate.initialize(user.getCars());
+                List<Car> cars = user.getCars();
+                Hibernate.initialize(user.getBikes());
+                List<Bike> bikes = user.getBikes();
+                dao.getSession().detach(user); //desconecta de la BD, lo mantiene en caché
+//              dao.getSession().evict(user); // desconecta de la BD y lo elimina del caché
+
+            }
+
+            tx.commit();
+        } catch (UnknownException ex) {
+            Logger.getLogger(ServiceUserImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return user;
+    }
+
 //     public List<Car> getCars(int userId){
 //     List<Car> cars = restTemplate.getForObject("http:localhost:9002/api/car/byuser/" + userId, List.class);
 //     return cars;
@@ -104,5 +128,43 @@ public class ServiceUserImpl implements InterServiceUser {
 //        tx.commit();
 //        return result;
 //    }
+    
+        @Override
+    @Transactional
+    public List<Car> findCarsByUserId(Long user_id) throws UnknownException {
+        Transaction tx = dao.getSession().beginTransaction();
+        try {
+            User user = dao.findById(user_id);
+            Hibernate.initialize(user.getCars());
+            List<Car> cars = user.getCars();
+            if (user == null) {
+                throw new UnknownException(ServiceUserImpl.class, "No se pudo encontrar el usuario con id " + user_id);
+            }
 
+            tx.commit();
+            return cars;
+        } catch (Exception ex) {
+            tx.rollback();
+            throw new UnknownException(ServiceUserImpl.class, "No se pudo llamar la lista de motos para el usuario con id " + user_id);
+        }
+    }
+    @Override
+    @Transactional
+    public List<Bike> findBikesByUserId(Long userId) throws UnknownException {
+        Transaction tx = dao.getSession().beginTransaction();
+        try {
+            User user = dao.findById(userId);
+            Hibernate.initialize(user.getBikes());
+            List<Bike> bikes = user.getBikes();
+            if (user == null) {
+                throw new UnknownException(ServiceUserImpl.class, "No se pudo encontrar el usuario con id " + userId);
+            }
+            tx.commit();
+            return bikes;
+        } catch (Exception ex) {
+            tx.rollback();
+            throw new UnknownException(ServiceUserImpl.class, "No se pudo llamar la lista de motos para el usuario con id " + userId);
+        }
+
+    }
 }

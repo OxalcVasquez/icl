@@ -26,9 +26,11 @@ public class TestBikeService extends TestBaseService {
     public void createEntity1() throws UnknownException {
         InterServiceBike service = contextService.getBean(ServiceBikeImpl.class);
         Bike bike = contextEntity.getBean(Bike.class);
+        User user = new User();
+        user.setId(new Long(1));
         bike.setModel("3422");
         bike.setBrand("Goliat");
-        bike.setUserId(1);
+        bike.setUser(user);
         bike.setIsPersistente(Boolean.TRUE);
         bike.setVersion(Long.MIN_VALUE);        
         service.saveBike(bike);

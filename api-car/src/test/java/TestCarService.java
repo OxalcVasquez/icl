@@ -25,7 +25,9 @@ public class TestCarService extends TestBaseService {
         Car car = contextEntity.getBean(Car.class);
         car.setModel("234");
         car.setBrand("Tesla");
-        car.setUserId(1);
+          User user = new User();
+        user.setId(new Long(1));
+        car.setUser(user);
         car.setIsPersistente(Boolean.TRUE);
         car.setVersion(Long.MIN_VALUE);        
         service.saveCar(car);
