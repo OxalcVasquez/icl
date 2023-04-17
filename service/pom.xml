@@ -13,6 +13,7 @@
         <version.maven-source-plugin>3.2.1</version.maven-source-plugin>    
         <version.spring-context>5.3.14</version.spring-context>   
         <version.slf4j-api>1.7.32</version.slf4j-api>    
+        <version.spring-security-oauth2-authorization-server>0.2.0</version.spring-security-oauth2-authorization-server>
     </properties>
     <dependencies>
         <dependency>
@@ -81,6 +82,11 @@
             <groupId>io.github.openfeign</groupId>
             <artifactId>feign-jackson</artifactId>
             <version>11.7</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-oauth2-authorization-server</artifactId>    
+            <version>${version.spring-security-oauth2-authorization-server}</version>
         </dependency>
     </dependencies>
     <build>

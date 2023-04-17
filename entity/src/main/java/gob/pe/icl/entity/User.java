@@ -34,8 +34,15 @@ import org.springframework.stereotype.Component;
 public class User extends GlobalEntityPkNumeric implements Serializable{
     @Column(name = "name")
     private String name;
+    
+    @Column(name = "username")
+    private String username;
+     
     @Column(name = "email")
     private String email;
+    
+    @Column(name = "password")
+    private String password;
     
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
