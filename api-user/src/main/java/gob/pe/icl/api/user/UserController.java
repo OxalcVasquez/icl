@@ -56,6 +56,15 @@ public class UserController {
         }
         return ResponseEntity.ok(user);
     }
+    
+     @GetMapping(value = "/{username}")
+    public ResponseEntity<User> fingByUsername(@PathVariable("username") String username) throws UnknownException {
+        User user = userService.fingByUsername(username);
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(user);
+    }
 
 //    @GetMapping("/cars/{userId}")
 //    public ResponseEntity<List<Car>> getCars(@PathVariable("userId") int userId) {

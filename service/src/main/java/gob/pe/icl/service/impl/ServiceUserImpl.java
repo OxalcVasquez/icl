@@ -128,8 +128,7 @@ public class ServiceUserImpl implements InterServiceUser {
 //        tx.commit();
 //        return result;
 //    }
-    
-        @Override
+    @Override
     @Transactional
     public List<Car> findCarsByUserId(Long user_id) throws UnknownException {
         Transaction tx = dao.getSession().beginTransaction();
@@ -148,6 +147,7 @@ public class ServiceUserImpl implements InterServiceUser {
             throw new UnknownException(ServiceUserImpl.class, "No se pudo llamar la lista de motos para el usuario con id " + user_id);
         }
     }
+
     @Override
     @Transactional
     public List<Bike> findBikesByUserId(Long userId) throws UnknownException {
@@ -166,5 +166,19 @@ public class ServiceUserImpl implements InterServiceUser {
             throw new UnknownException(ServiceUserImpl.class, "No se pudo llamar la lista de motos para el usuario con id " + userId);
         }
 
+    }
+
+    @Override
+    public User fingByUsername(String username) throws UnknownException {
+
+        User user = null;
+        try {
+            Transaction tx = dao.getSession().beginTransaction();
+            user = (User) dao.allFields("=:username:" + username, null);
+            tx.commit();
+        } catch (UnknownException ex) {
+            Logger.getLogger(MyUserDetailsService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return user;
     }
 }

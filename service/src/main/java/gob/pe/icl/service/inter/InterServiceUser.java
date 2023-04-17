@@ -17,6 +17,7 @@ import java.util.List;
 public interface InterServiceUser {
     User saveUser(User entidad)throws UnknownException;
     User getUserById(long id);
+    User fingByUsername(String username)throws UnknownException;
     User getUserWithCars(long id);
      List<Car> findCarsByUserId(Long user_id) throws UnknownException;
     List<Bike> findBikesByUserId(Long userId) throws UnknownException;
